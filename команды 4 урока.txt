@@ -1,0 +1,70 @@
+SELECT * FROM users LIMIT 20;
+
+DESC users;
+
+UPDATE users SET updated_at = CURRENT_TIMESTAMP() WHERE created_at > updated_at;
+
+DESC profiles;
+
+SELECT * FROM profiles LIMIT 20;
+
+UPDATE profiles SET photo_id = FLOOR(1 + RAND() * 100);
+
+SHOW TABLES;
+
+DESC messages;
+
+SELECT * FROM messages LIMIT 10;
+
+DESC media;
+
+SELECT * FROM media_types;
+
+DELETE FROM media_types;
+
+INSERT INTO media_types (name) VALUES
+	('photo'),
+	('video'),
+	('audio')
+;
+
+TRUNCATE media_types; 
+
+SELECT * FROM media LIMIT 20;
+
+CREATE TEMPORARY TABLE extensions (name VARCHAR(10));
+
+INSERT INTO extensions VALUES ('jpeg'), ('avi'), ('mpeg'), ('png');
+
+SELECT * FROM extensions;
+
+UPDATE media SET file_name = CONCAT('https://dropbox/vk/', file_name, '.', (SELECT name FROM extensions ORDER BY RAND() LIMIT 1));
+
+UPDATE media SET size = FLOOR(10000 + RAND() * 100000) WHERE size < 1000;
+
+UPDATE media SET metadata = CONCAT('{"owner":"', 
+  (SELECT CONCAT(first_name, ' ', last_name) FROM users WHERE id = user_id),
+  '"}');
+  
+ALTER TABLE media MODIFY COLUMN metadata JSON;
+
+DESC friendship;
+
+SELECT * FROM friendship LIMIT 20;
+
+UPDATE friendship SET friend_id = friend_id + 1 WHERE user_id = friend_id;
+
+SELECT * FROM friendship_status;
+
+TRUNCATE friendship_status;
+
+INSERT INTO friendship_status (name) VALUES
+	('Requested'),
+	('Confirmed'),
+	('Rejected');
+	
+UPDATE friendship SET status_id = FLOOR(1 + RAND() * 3);
+
+DESC communities;
+
+SELECT * FROM  communities;
